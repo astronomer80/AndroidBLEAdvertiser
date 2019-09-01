@@ -1,1 +1,0 @@
-Advertiser Android App
