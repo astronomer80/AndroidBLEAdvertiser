@@ -6,22 +6,28 @@ import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.ParcelUuid;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
+import java.util.Set;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
 
-    private static int TIMEOUT_TIME = 3000;
+    private int rTimeoutValue = 3000;
 
     BluetoothLeAdvertiser advertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
     Switch switch_button_gate;
@@ -66,6 +72,27 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        String rTimeoutValueS = PreferenceManager
+                .getDefaultSharedPreferences(this)
+                .getString("timeout_value", "3");
+        rTimeoutValue = Integer.parseInt(rTimeoutValueS);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main2, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.action_settings){
+            Intent intent = new Intent(this, SettingsActivity.class);
+
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private boolean fCheckBluetoothDevice(){
@@ -95,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                 .setAdvertiseMode( AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY )
                 .setTxPowerLevel( AdvertiseSettings.ADVERTISE_TX_POWER_HIGH )
                 .setConnectable( false )
-                .setTimeout(TIMEOUT_TIME)
+                .setTimeout(rTimeoutValue*1000)
                 .build();
 
         ParcelUuid pUuid = new ParcelUuid( UUID.fromString( "CDB7950D-73F1-4D4D-8E47-C090502DBD63" ) );
@@ -138,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 fResetSwitch();
             }
-        }, TIMEOUT_TIME);
+        }, rTimeoutValue*1000);
 
     }
 
