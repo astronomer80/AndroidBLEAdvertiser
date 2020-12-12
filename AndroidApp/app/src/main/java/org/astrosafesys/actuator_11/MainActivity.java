@@ -7,7 +7,6 @@ import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
@@ -145,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         AdvertiseCallback advertisingCallback = new AdvertiseCallback() {
             @Override
             public void onStartSuccess(AdvertiseSettings settingsInEffect) {
-                Log.e( "BLE", "Advertising onStartSuccess " );
+                Log.i( "BLE", "Advertising onStartSuccess " );
                 super.onStartSuccess(settingsInEffect);
             }
 
